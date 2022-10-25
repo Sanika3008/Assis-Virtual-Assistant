@@ -1,5 +1,6 @@
 from datetime import datetime  
-import excel     
+import excel    
+import wolframalpha
 import instadownloader
 import smtplib
 import PyPDF2
@@ -143,6 +144,45 @@ class MainThread(QThread):
                 music_dir = 'C:\\Users\\Sanika'
                 songs = os.listdir(music_dir)
                 os.startfile(os.path.join(music_dir,songs[0]))
+            
+            elif "where is" in self.query:
+                 self.query = self.query.replace("where is","")
+                 location = self.query
+                 speak("User asked to Locate")
+                 speak(location)
+                 webbrowser.open("https://www.google.nl / maps / place/" + location + "")
+            
+            elif "write a note" in self.query:
+                 speak("What should i write, sir")
+                 note = self.takeCommand()
+                 file = open('sanika.txt', 'w')
+                 speak("Sir, Should i include date and time")
+                 snfm = self.takeCommand()
+                 if 'yes' in snfm or 'sure' in snfm:
+                     strTime = datetime.datetime.now().strftime("%m-%D-%Y %H:%M%p")
+                     file.write(strTime)
+                     file.write(" :- ")
+                     file.write(note)
+                 else:
+                     file.write(note)
+                 speak("Done")
+         
+            elif "show note" in self.query:
+                 speak("Showing Notes")
+                 file = open("sanika.txt", "r")
+                 print(file.read())
+                 speak(file.read(6))
+             
+            elif "calculate" in self.query:
+             
+                 app_id = "Wolframalpha api id"
+                 client = wolframalpha.Client(app_id)
+                 indx = self.query.lower().split().index('calculate')
+                 self.query = self.query.split()[indx + 1:]
+                 res = client.query(' '.join(query))
+                 answer = next(res.results).text
+                 print("The answer is " + answer)
+                 speak("The answer is " + answer)
 
             elif 'ip address' in self.query:
                 ip = pip._vendor.requests.get('https://api.ipify.org').text
@@ -238,7 +278,6 @@ class MainThread(QThread):
                     speak("Profile pic is saved in our main folder sir")
                 else:
                     pass
-
 
 
             elif 'send message' in self.query:
