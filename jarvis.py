@@ -36,6 +36,10 @@ engine  = pyttsx3.init('sapi5')
 voices  = engine.getProperty('voices')
 engine.setProperty('voices',voices[0].id)
 
+EMAIL_ADDRESS = os.environ.get('emailaddress')
+EMAIL_PASSWORD = os.environ.get('emailpassword')
+
+
 def speak(audio):
     engine.say(audio)
     print(audio)
@@ -57,8 +61,8 @@ def sendEmail(to,content):
     server = smtplib.SMTP('smtp.gmail.com',587)
     server.ehlo()
     server.starttls()
-    server.login('aakashgupta_ce_2020@ltce.in','11k1shgupta')
-    server.sendmail('aakashgupta_ce_2020@ltce.in', to,content)
+    server.login(EMAIL_ADDRESS,EMAIL_PASSWORD)
+    server.sendmail(EMAIL_ADDRESS, to,content)
     server.close()
 
 def news():
@@ -151,6 +155,13 @@ class MainThread(QThread):
                  speak("User asked to Locate")
                  speak(location)
                  webbrowser.open("https://www.google.nl / maps / place/" + location + "")
+           
+            elif 'how are you' in self.query:
+                 speak("I am fine, Thank you")
+                 speak("How are you, Sir")
+           
+           elif "tell me your name" in self.query:
+                 speak("I am Assis. Your desktop Assistant")
             
             elif "write a note" in self.query:
                  speak("What should i write, sir")
@@ -286,13 +297,14 @@ class MainThread(QThread):
             elif 'send email' in self.query:
                 try:
                     speak("What should i send")
-                    content = 'jdkncknnck nink nk n'
+                    content = self.takeCommand().lower()
                     to = 'gujarsanika3008@gmail.com'
                     sendEmail(to,content)
                     speak("Email has been send")
                 except Exception as e:
                     print(e)
-                    speak("Sorry sir, email send nhi hua!")
+                    speak("Sorry sir, email is not sent")
+    # social media 
     # social media 
 
     # excel 
