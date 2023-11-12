@@ -66,7 +66,7 @@ def sendEmail(to,content):
     server.close()
 
 def news():
-    url = 'https://newsapi.org/v2/top-headlines?sources=techcrunch&apiKey=83263a48521a48a797182dbc3926e513'
+    url = 'https://newsapi.org/v2/top-headlines?sources=techcrunch&apiKey=""'
     print(url)
     page = requests.get(url).json()
     articles = page['articles']
